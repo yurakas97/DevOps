@@ -1,9 +1,11 @@
 # DevOps
 
 if root:
-```sudo adduser newusername
+```bash
+sudo adduser newusername
 sudo usermod -aG sudo newusername
-su - newusername```
+su - newusername
+```
 
 if user:
 ```sudo usermod -aG sudo newusername```
