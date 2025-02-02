@@ -8,6 +8,11 @@ su - newusername
 ```
 
 if user:
-```sudo usermod -aG sudo newusername```
+```bash
+sudo usermod -aG sudo newusername
+```
 
-```curl -sSL https://raw.githubusercontent.com/yurakas97/DevOps/main/install_devops_tools.sh | bash```
+run:
+```bash
+curl -sSL https://raw.githubusercontent.com/yurakas97/DevOps/main/install_devops_tools.sh | bash
+```
