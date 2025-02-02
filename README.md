@@ -1,6 +1,6 @@
 # DevOps
 
-<h1>Environment</h1>
+<h2>Environment</h2>
 
 if root:
 ```bash
