@@ -1,4 +1,4 @@
-echo "new"
+echo "new2"
 sleep 3
 
 sudo usermod -aG sudo $USER
