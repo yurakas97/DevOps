@@ -1,3 +1,6 @@
+echo "new"
+sleep 3
+
 sudo usermod -aG sudo $USER
 
 cd $HOME
