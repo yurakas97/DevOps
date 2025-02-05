@@ -1,5 +1,3 @@
-echo "NEWWWWWW"
-sleep 3
 sudo usermod -aG sudo $USER
 
 cd $HOME
@@ -188,3 +186,51 @@ EOF
 echo "docker copmope build"
 sleep 3
 docker compose up -d --build
+
+echo "setting up frontend nginx"
+sleep 2
+
+sudo tee /etc/nginx/sites-available/frontend << 'EOF'
+# Використовуємо офіційний образ Nginx
+FROM nginx:latest
+
+# Копіюємо конфігурацію Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Копіюємо файли сайту
+COPY . /usr/share/nginx/html
+
+# Виставляємо порт
+EXPOSE 80
+
+# Запускаємо Nginx
+CMD ["nginx", "-g", "daemon off;"]
+EOF
+
+sudo ln -s /etc/nginx/sites-available/frontend /etc/nginx/sites-enabled/
+
+echo "checking nginx configuration"
+sleep 2
+sudo nginx -t
+sudo systemctl restart nginx
+
+echo "installing certbot..."
+sleep 3
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d yurakas97.xyz
+
+echo "finishing..."
+sleep 3
+sudo chown -R www-data:www-data /home/$USER/project/frontend
+sudo chmod -R 755 /home/$USER/project/frontend
+sudo mv /home/$USER/project/frontend/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+
+sudo systemctl restart nginx
+
+echo "Done"
+sleep 2
+
+echo "use - https://yurakas97.xyz - to access the frontend page"
+
