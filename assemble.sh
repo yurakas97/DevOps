@@ -185,7 +185,7 @@ EOF
 
 echo "docker copmope build"
 sleep 3
-docker compose up -d --build
+sudo docker compose up -d --build
 
 echo "setting up frontend nginx"
 sleep 2
