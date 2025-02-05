@@ -195,20 +195,51 @@ echo "setting up frontend nginx"
 sleep 2
 
 sudo tee /etc/nginx/sites-available/frontend << 'EOF'
-# Використовуємо офіційний образ Nginx
-FROM nginx:latest
+server {
+    listen 80;
+    server_name yurakas97.xyz www.yurakas97.xyz;
 
-# Копіюємо конфігурацію Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+    root /var/www/html;
+    index index.html;
 
-# Копіюємо файли сайту
-COPY . /usr/share/nginx/html
+    location /api/message {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
 
-# Виставляємо порт
-EXPOSE 80
+    location / {
+        root /var/www/html;
+        index index.html;
+    }
+}
 
-# Запускаємо Nginx
-CMD ["nginx", "-g", "daemon off;"]
+server {
+    listen 443 ssl;
+    server_name yurakas97.xyz www.yurakas97.xyz;
+
+    ssl_certificate /etc/letsencrypt/live/yurakas97.xyz/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yurakas97.xyz/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    root /var/www/html;
+    index index.html;
+
+    location /api/message {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        try_files $uri /index.html;
+    }
+}
 EOF
 
 sudo ln -s /etc/nginx/sites-available/frontend /etc/nginx/sites-enabled/
