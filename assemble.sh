@@ -150,41 +150,6 @@ document.getElementById("fetchMessage").addEventListener("click", async () => {
 });
 EOF
 
-echo "creating nginx"
-sleep 2
-
-cat > nginx.conf << 'EOF'
-server {
-    listen 80;
-    server_name localhost;
-
-    location / {
-        root /usr/share/nginx/html;
-        index index.html;
-    }
-}
-EOF
-
-echo "creating Dockerfile"
-sleep 2
-
-cat > Dockerfile << 'EOF'
-# Використовуємо офіційний образ Nginx
-FROM nginx:latest
-
-# Копіюємо конфігурацію Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Копіюємо файли сайту
-COPY . /usr/share/nginx/html
-
-# Виставляємо порт
-EXPOSE 80
-
-# Запускаємо Nginx
-CMD ["nginx", "-g", "daemon off;"]
-EOF
-
 sudo usermod -aG docker $USER
 
 echo "docker copmope build"
@@ -194,8 +159,13 @@ sudo docker compose up -d --build
 echo "setting up frontend nginx"
 sleep 2
 
-sudo tee /etc/nginx/sites-available/frontend << 'EOF'
+sudo chown -R www-data:www-data /home/$USER/project/frontend
+sudo chmod -R 755 /home/$USER/project/frontend
+sudo cp /home/$USER/project/frontend/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
 
+sudo tee /etc/nginx/sites-available/frontend << 'EOF'
 server {
     listen 80;
     server_name yurakas97.xyz www.yurakas97.xyz;
@@ -203,41 +173,52 @@ server {
     root /var/www/html;
     index index.html;
 
+    location /api/message {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     location / {
-        try_files $uri $uri/ /index.html;
+        root /var/www/html;
+        index index.html;
     }
 }
 
 server {
-    listen 443 ssl;
+    listen 443;
     server_name yurakas97.xyz www.yurakas97.xyz;
 
     root /var/www/html;
     index index.html;
 
+    location /api/message {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files $uri /index.html;
     }
 }
-
 EOF
 
 sudo ln -s /etc/nginx/sites-available/frontend /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
 
 echo "installing certbot..."
 sleep 3
 sudo apt install certbot python3-certbot-nginx -y
 sudo certbot --nginx -d yurakas97.xyz
 
-sudo chown -R www-data:www-data /home/$USER/project/frontend
-sudo chmod -R 755 /home/$USER/project/frontend
-sudo mv /home/$USER/project/frontend/* /var/www/html/
-sudo chown -R www-data:www-data /var/www/html
-sudo chmod -R 755 /var/www/html
-
 echo "checking nginx configuration"
 sleep 2
-sudo nginx -t
 sudo systemctl restart nginx
 
 echo "Done"
