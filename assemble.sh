@@ -35,7 +35,7 @@ sleep 5
 sudo apt update
 sudo apt install nginx -y
 
-cd backend
+mkdir backend && cd backend
 npm init -y
 npm install express cors dotenv
 
@@ -104,7 +104,7 @@ services:
       - "3000:3000"
 EOF
 
-cd frontend
+mkdir frontend && cd frontend
 
 echo "creating index html"
 sleep 2
