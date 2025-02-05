@@ -1,3 +1,5 @@
+echo "NEWWWWWW"
+sleep 3
 sudo usermod -aG sudo $USER
 
 cd $HOME
