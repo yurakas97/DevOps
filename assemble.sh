@@ -212,11 +212,6 @@ server {
     listen 443 ssl;
     server_name yurakas97.xyz www.yurakas97.xyz;
 
-    ssl_certificate /etc/letsencrypt/live/yurakas97.xyz/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/yurakas97.xyz/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-
     root /var/www/html;
     index index.html;
 
