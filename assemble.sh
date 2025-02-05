@@ -1,4 +1,4 @@
-echo "new2"
+echo "new3"
 sleep 3
 
 sudo usermod -aG sudo $USER
@@ -195,6 +195,7 @@ echo "setting up frontend nginx"
 sleep 2
 
 sudo tee /etc/nginx/sites-available/frontend << 'EOF'
+
 server {
     listen 80;
     server_name yurakas97.xyz www.yurakas97.xyz;
@@ -202,17 +203,8 @@ server {
     root /var/www/html;
     index index.html;
 
-    location /api/message {
-        proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
     location / {
-        root /var/www/html;
-        index index.html;
+        try_files $uri $uri/ /index.html;
     }
 }
 
@@ -228,31 +220,24 @@ server {
     root /var/www/html;
     index index.html;
 
-    location /api/message {
-        proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
     location / {
-        try_files $uri /index.html;
+        try_files $uri $uri/ /index.html;
     }
 }
+
 EOF
 
 sudo ln -s /etc/nginx/sites-available/frontend /etc/nginx/sites-enabled/
-
-echo "checking nginx configuration"
-sleep 2
-sudo nginx -t
-sudo systemctl restart nginx
 
 echo "installing certbot..."
 sleep 3
 sudo apt install certbot python3-certbot-nginx -y
 sudo certbot --nginx -d yurakas97.xyz
+
+echo "checking nginx configuration"
+sleep 2
+sudo nginx -t
+sudo systemctl restart nginx
 
 echo "finishing..."
 sleep 3
