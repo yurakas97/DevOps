@@ -240,11 +240,6 @@ sleep 2
 sudo nginx -t
 sudo systemctl restart nginx
 
-echo "finishing..."
-sleep 3
-
-sudo systemctl restart nginx
-
 echo "Done"
 sleep 2
 
