@@ -182,6 +182,7 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 EOF
 
+sudo usermod -aG docker $USER
 
 echo "docker copmope build"
 sleep 3
