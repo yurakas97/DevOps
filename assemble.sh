@@ -1,4 +1,4 @@
-echo "new3"
+echo "new4"
 sleep 3
 
 sudo usermod -aG sudo $USER
@@ -229,6 +229,12 @@ sleep 3
 sudo apt install certbot python3-certbot-nginx -y
 sudo certbot --nginx -d yurakas97.xyz
 
+sudo chown -R www-data:www-data /home/$USER/project/frontend
+sudo chmod -R 755 /home/$USER/project/frontend
+sudo mv /home/$USER/project/frontend/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+
 echo "checking nginx configuration"
 sleep 2
 sudo nginx -t
@@ -236,11 +242,6 @@ sudo systemctl restart nginx
 
 echo "finishing..."
 sleep 3
-sudo chown -R www-data:www-data /home/$USER/project/frontend
-sudo chmod -R 755 /home/$USER/project/frontend
-sudo mv /home/$USER/project/frontend/* /var/www/html/
-sudo chown -R www-data:www-data /var/www/html
-sudo chmod -R 755 /var/www/html
 
 sudo systemctl restart nginx
 
