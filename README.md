@@ -19,7 +19,7 @@ run:
 curl -sSL https://raw.githubusercontent.com/yurakas97/DevOps/main/install_devops_tools.sh | bash
 ```
 
-assemble:
+<h2>Assemble</h2>
 ```bash
 curl -sSL https://raw.githubusercontent.com/yurakas97/DevOps/main/assemble.sh | bash
 ```
