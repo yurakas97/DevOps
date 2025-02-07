@@ -24,9 +24,10 @@ curl -sSL https://raw.githubusercontent.com/yurakas97/DevOps/main/install_devops
 ```bash
 curl -sSL https://raw.githubusercontent.com/yurakas97/DevOps/main/assemble.sh | bash
 ```
-<h2>Assemble</h2>
+<h2>CI/CD</h2>
 
 ```bash
+cd /home/$USER/project
 mkdir -p .github/workflows
 ```
 
