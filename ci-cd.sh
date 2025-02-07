@@ -3,9 +3,8 @@
 cd /home/$USER/project
 mkdir -p .github/workflows
 
+tee .github/workflows/deploy.yml << 'EOF'
 
-
-nano .github/workflows/deploy.yml
 name: Deploy to Server
 
 on:
@@ -47,3 +46,5 @@ jobs:
 
             echo "Building and starting new containers.."
             docker compose up -d --build
+            
+            EOF
