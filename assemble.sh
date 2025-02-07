@@ -1,3 +1,5 @@
+#!/bin/bash
+
 sudo usermod -aG sudo $USER
 
 cd $HOME
