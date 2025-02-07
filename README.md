@@ -31,3 +31,9 @@ at root server
 ```bash
 curl -sSL https://raw.githubusercontent.com/yurakas97/DevOps/main/ci-cd.sh | bash
 ```
+
+```bash
+git add .
+git commit -m "message"
+git push
+```
