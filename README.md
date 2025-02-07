@@ -26,6 +26,8 @@ curl -sSL https://raw.githubusercontent.com/yurakas97/DevOps/main/assemble.sh | 
 ```
 <h2>CI/CD</h2>
 
+at root server
+
 ```bash
 curl -sSL https://raw.githubusercontent.com/yurakas97/DevOps/main/ci-cd.sh | bash
 ```
