@@ -1,5 +1,10 @@
+#!/bin/bash
+
 cd /home/$USER/project
 mkdir -p .github/workflows
+
+
+
 nano .github/workflows/deploy.yml
 name: Deploy to Server
 
